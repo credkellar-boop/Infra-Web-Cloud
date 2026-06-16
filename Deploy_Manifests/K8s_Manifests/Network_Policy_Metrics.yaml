@@ -1,0 +1,17 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: hubble-metrics-allow
+  namespace: core-infrastructure
+spec:
+  endpointSelector:
+    matchLabels:
+      k8s-app: cilium
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: infrastructure-prometheus
+      toPorts:
+        - ports:
+            - port: "9965"
+              protocol: TCP
