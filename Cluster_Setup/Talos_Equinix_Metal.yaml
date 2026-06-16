@@ -1,0 +1,14 @@
+machine:
+  network:
+    interfaces:
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          xmitHashPolicy: layer3+4
+          miimon: 100
+          interfaces:
+            - eno1
+            - eno2
+        dhcp: true
+        vip:
+          ip: 10.0.0.10
