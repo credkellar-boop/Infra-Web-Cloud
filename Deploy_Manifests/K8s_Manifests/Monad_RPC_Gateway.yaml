@@ -1,0 +1,26 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumEnvoyConfig
+metadata:
+  name: blockchain-rpc-accelerator
+  namespace: core-infrastructure
+spec:
+  services:
+    - name: monad-validator-rpc
+      namespace: core-infrastructure
+  backendServices:
+    - name: monad-validator-rpc
+      namespace: core-infrastructure
+  resources:
+    - "@type": type.googleapis.com/envoy.config.listener.v3.Listener
+      name: rpc_listener
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: 8545
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.tcp_proxy
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+                stat_prefix: rpc_ingress
+                cluster: monad-validator-rpc
