@@ -13,6 +13,12 @@ services:
       - ./vault_dev_policy.hcl:/vault/config/policy.hcl
     cap_add:
       - IPC_LOCK
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /vault/file
 
   prometheus-dev:
     image: prom/prometheus:v2.47.0
@@ -21,6 +27,8 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.local.yml:/etc/prometheus/prometheus.yml
+    security_opt:
+      - no-new-privileges:true
 
   mock-enclave:
     build:
@@ -29,3 +37,5 @@ services:
     container_name: infra-enclave-mock
     ports:
       - "5000:5000"
+    security_opt:
+      - no-new-privileges:true
