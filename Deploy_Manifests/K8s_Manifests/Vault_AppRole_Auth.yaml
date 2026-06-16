@@ -1,0 +1,10 @@
+apiVersion: vault.hashicorp.com/v1alpha1
+kind: VaultAuthMethod
+metadata:
+  name: approle-infrastructure
+  namespace: core-infrastructure
+spec:
+  type: "approle"
+  config:
+    default_lease_ttl: "1h"
+    max_lease_ttl: "24h"
