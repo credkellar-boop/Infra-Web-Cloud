@@ -1,0 +1,24 @@
+name: Continuous-Kernel-Fuzzing
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  eBPF_and_Uring_Fuzz:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [kernel_harnesses, io_uring_harnesses, packet_parsers]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup LLVM & Clang
+        run: sudo apt-get update && sudo apt-get install -y clang llvm liburing-dev
+
+      - name: Compile and Execute Target
+        run: |
+          cd Security_Fuzzing/${{ matrix.target }}
+          make
+          ./*_fuzz_target -max_total_time=300
