@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: infrastructure-prometheus
+  namespace: core-infrastructure
+spec:
+  serviceAccountName: prometheus-k8s
+  serviceMonitorSelector:
+    matchLabels:
+      k8s-app: cilium
+  resources:
+    requests:
+      memory: 400Mi
