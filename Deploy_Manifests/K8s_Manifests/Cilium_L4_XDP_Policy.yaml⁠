@@ -1,0 +1,16 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: xdp-hardware-firewall
+  namespace: core-infrastructure
+spec:
+  endpointSelector:
+    matchLabels:
+      app: monad-validator-core
+  ingress:
+    - fromCIDR:
+        - "10.0.0.0/8"
+      toPorts:
+        - ports:
+            - port: "8545"
+              protocol: TCP
