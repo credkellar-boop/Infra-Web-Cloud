@@ -14,14 +14,25 @@ spec:
       labels:
         app: monad-validator-core
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
       containers:
       - name: monad-client
         image: monad-project/execution-client:latest
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
         resources:
           requests:
             memory: "16Gi"
             cpu: "8"
-            baremetal_sriov_nics: "1" # Explicit mapping to direct hardware virtual functions
+            baremetal_sriov_nics: "1"
           limits:
             memory: "32Gi"
             cpu: "16"
@@ -29,6 +40,8 @@ spec:
         volumeMounts:
         - name: validator-nvme-storage
           mountPath: /var/lib/monad/data
+        - name: tmp-dir
+          mountPath: /tmp
   volumeClaimTemplates:
   - metadata:
       name: validator-nvme-storage
