@@ -1,0 +1,9 @@
+apiVersion: vault.hashicorp.com/v1alpha1
+kind: VaultDynamicSecret
+metadata:
+  name: dynamic-db-credentials
+  namespace: core-infrastructure
+spec:
+  path: "database/creds/infra-read-role"
+  targetSecret:
+    name: dynamic-db-rotated-pass
