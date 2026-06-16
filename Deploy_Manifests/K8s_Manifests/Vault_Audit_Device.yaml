@@ -1,0 +1,12 @@
+apiVersion: vault.hashicorp.com/v1alpha1
+kind: VaultAudit
+metadata:
+  name: stdout-audit-trail
+  namespace: core-infrastructure
+spec:
+  type: file
+  description: "High-throughput stdout audit logging for FluentBit ingestion"
+  options:
+    file_path: "stdout"
+    log_raw: "false"
+    hmac_accessor: "true"
