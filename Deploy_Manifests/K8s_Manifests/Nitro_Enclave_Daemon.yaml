@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nitro-enclaves-allocator
+  namespace: core-infrastructure
+spec:
+  selector:
+    matchLabels:
+      name: aws-nitro-enclaves-k8s-dp
+  template:
+    metadata:
+      labels:
+        name: aws-nitro-enclaves-k8s-dp
+    spec:
+      containers:
+      - name: device-plugin
+        image: public.ecr.aws/aws-ec2/aws-nitro-enclaves-k8s-device-plugin:latest
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: device-plugin
+          mountPath: /var/lib/kubelet/device-plugins
+        - name: dev
+          mountPath: /dev
+      volumes:
+      - name: device-plugin
+        hostPath:
+          path: /var/lib/kubelet/device-plugins
+      - name: dev
+        hostPath:
+          path: /dev
