@@ -1,0 +1,21 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: kafka-secure-topics
+  namespace: core-infrastructure
+spec:
+  endpointSelector:
+    matchLabels:
+      app: messaging-broker
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: telemetry-consumer
+      toPorts:
+        - ports:
+            - port: "9092"
+              protocol: TCP
+          rules:
+            kafka:
+              - role: "consume"
+                topic: "ebpf-kernel-stream"
