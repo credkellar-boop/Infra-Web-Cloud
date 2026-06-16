@@ -1,0 +1,7 @@
+.git
+.env
+*.local
+Local_Dev/certs/
+target/
+zig-out/
+zig-cache/
