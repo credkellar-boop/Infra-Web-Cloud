@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  local-vault:
+    image: hashicorp/vault:1.15.2
+    container_name: dev-vault
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: "root_token_placeholder"
+    cap_add:
+      - IPC_LOCK
+
+  dev-fuzzer:
+    build:
+      context: ../
+      dockerfile: Security_Fuzzing/Dockerfile.fuzz
+    container_name: local-fuzz-runner
+    volumes:
+      - ../Security_Fuzzing:/fuzzing
