@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform-core
+  namespace: argocd
+spec:
+  description: Core infrastructure enforcement domain
+  sourceRepos:
+    - 'https://github.com/credkellar-boop/Infra-Web-Cloud.git'
+  destinations:
+    - namespace: core-infrastructure
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
