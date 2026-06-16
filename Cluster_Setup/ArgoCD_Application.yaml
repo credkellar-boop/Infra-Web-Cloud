@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: infra-web-cloud-stack
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/credkellar-boop/Infra-Web-Cloud.git'
+    targetRevision: HEAD
+    path: Deploy_Manifests/K8s_Manifests
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: core-infrastructure
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
