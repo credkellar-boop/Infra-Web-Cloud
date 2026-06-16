@@ -1,0 +1,3 @@
+name: Infra-Web-Cloud
+runtime: go
+description: Core infrastructure choreography for the zero-trust bare-metal stack
