@@ -1,0 +1,17 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumEgressGatewayPolicy
+metadata:
+  name: baseline-egress-gateway
+  namespace: core-infrastructure
+spec:
+  selectors:
+    - podSelector:
+        matchLabels:
+          app: external-dependent-service
+  destinationCIDRs:
+    - "192.168.1.0/24"
+  egressGateway:
+    nodeSelector:
+      matchLabels:
+        infrastructure.io/gateway: "true"
+    egressIP: "10.0.0.50"
