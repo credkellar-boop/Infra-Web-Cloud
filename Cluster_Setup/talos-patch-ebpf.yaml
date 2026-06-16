@@ -1,0 +1,13 @@
+machine:
+  kubelet:
+    extraMounts:
+      - hostPath: /sys/fs/bpf
+        mountPath: /sys/fs/bpf
+        readOnly: false
+  features:
+    hostNetwork: true
+    kubernetesTalosAPIExtension: true
+cluster:
+  network:
+    cni:
+      name: custom
