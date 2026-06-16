@@ -1,0 +1,15 @@
+apiVersion: vault.hashicorp.com/v1alpha1
+kind: VaultStorage
+metadata:
+  name: raft-storage-backend
+  namespace: core-infrastructure
+spec:
+  raft:
+    enabled: true
+    setNodeIds: true
+    config: |
+      cluster_name = "vault-cluster-prod"
+      storage "raft" {
+        path    = "/vault/data"
+        node_id = "node1"
+      }
