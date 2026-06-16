@@ -1,0 +1,29 @@
+name: Infra-Web-Cloud-CI
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  Security_Audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Scan Secrets with TruffleHog
+        uses: trufflesecurity/trufflehog@main
+
+      - name: Run Semgrep Scan
+        run: semgrep ci --config=auto
+
+  Deploy_Infrastructure:
+    needs: Security_Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: Execute Pulumi Up
+        run: |
+          cd Deploy_Manifests
+          pulumi up --yes
