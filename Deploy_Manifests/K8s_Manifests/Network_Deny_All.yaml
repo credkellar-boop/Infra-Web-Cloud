@@ -1,0 +1,13 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: core-infrastructure
+spec:
+  endpointSelector:
+    matchLabels: {}
+  ingress:
+    - {}
+  egress:
+    - toEntities:
+        - cluster
