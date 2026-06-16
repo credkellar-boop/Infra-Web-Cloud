@@ -1,0 +1,13 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: high-perf-sriov-policy
+  namespace: core-infrastructure
+spec:
+  deviceType: vfio-pci
+  mtu: 9000
+  nicSelector:
+    pfNames: ["ens1f0"]
+  numVfs: 4
+  priority: 99
+  resourceName: baremetal_sriov_nics
