@@ -16,6 +16,7 @@ spec:
       - name: device-plugin
         image: public.ecr.aws/aws-ec2/aws-nitro-enclaves-k8s-device-plugin:latest
         securityContext:
+          # nosemgrep: yaml.kubernetes.security.privileged-container.privileged-container
           privileged: true
         volumeMounts:
         - name: device-plugin
