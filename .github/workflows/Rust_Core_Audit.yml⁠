@@ -1,0 +1,31 @@
+name: Core-Systems-Security-Audit
+on:
+  push:
+    paths:
+      - 'Core_Systems/**'
+  pull_request:
+    paths:
+      - 'Core_Systems/**'
+
+jobs:
+  Rust_Code_Verification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Stable Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Verify Code Formatting Alignment
+        run: cargo fmt --manifest-path Core_Systems/Cargo.toml -- --check
+
+      - name: Run Cargo Clippy (Strict Enforcement)
+        run: cargo clippy --manifest-path Core_Systems/Cargo.toml -- -D warnings
+
+      - name: Audit Vulnerability Dependency Tree
+        uses: rustsec/audit-check-action@v2.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
