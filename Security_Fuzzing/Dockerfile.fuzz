@@ -1,0 +1,5 @@
+FROM ubuntu:22.04
+RUN apt-get update && apt-get install -y clang make git curl
+WORKDIR /fuzzing
+COPY ./Security_Fuzzing .
+RUN make -C kernel_harnesses
