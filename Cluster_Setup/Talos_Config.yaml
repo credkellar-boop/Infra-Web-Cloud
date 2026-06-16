@@ -1,0 +1,5 @@
+context: talos-bare-metal-cluster
+cluster:
+  network:
+    cni:
+      name: none # Set to none because Cilium will replace standard CNI natively via eBPF
