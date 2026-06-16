@@ -1,0 +1,6 @@
+[libfuzzer]
+max_len = 2048
+timeout = 25
+rss_limit_mb = 4096
+detect_leaks = 1
+dict = rpc_protocol.dict
