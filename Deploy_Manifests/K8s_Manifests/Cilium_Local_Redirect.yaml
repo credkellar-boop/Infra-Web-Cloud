@@ -1,0 +1,16 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumLocalRedirectPolicy
+metadata:
+  name: blockchain-rpc-local-bypass
+  namespace: core-infrastructure
+spec:
+  redirectFrontend:
+    address: "169.254.169.254"
+    toPorts:
+      - port: "80"
+        protocol: TCP
+  redirectBackend:
+    localEndpointSelector:
+      matchLabels:
+        app: monad-validator-core
+    toPort: 8545
