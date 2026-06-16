@@ -1,0 +1,10 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: vault-core-pdb
+  namespace: core-infrastructure
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: vault-core
