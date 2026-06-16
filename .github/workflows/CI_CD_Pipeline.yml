@@ -14,16 +14,6 @@ jobs:
         uses: trufflesecurity/trufflehog@main
 
       - name: Run Semgrep Scan
-        run: semgrep ci --config=auto
-
-  Deploy_Infrastructure:
-    needs: Security_Audit
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        
-      - name: Execute Pulumi Up
-        run: |
-          cd Deploy_Manifests
-          pulumi up --yes
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: auto
