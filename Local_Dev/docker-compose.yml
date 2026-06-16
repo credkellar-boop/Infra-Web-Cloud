@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  vault-dev:
+    image: hashicorp/vault:1.15.2
+    container_name: infra-vault-dev
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: "root_token_placeholder"
+      VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:8200"
+    volumes:
+      - ./vault_dev_policy.hcl:/vault/config/policy.hcl
+    cap_add:
+      - IPC_LOCK
+
+  prometheus-dev:
+    image: prom/prometheus:v2.47.0
+    container_name: infra-prometheus-dev
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.local.yml:/etc/prometheus/prometheus.yml
+
+  mock-enclave:
+    build:
+      context: .
+      dockerfile: inline.Dockerfile
+    container_name: infra-enclave-mock
+    ports:
+      - "5000:5000"
