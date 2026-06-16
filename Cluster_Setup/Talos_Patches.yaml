@@ -1,0 +1,9 @@
+machine:
+  kernel:
+    args:
+      - intel_iommu=on
+      - iommu=pt
+      - pci=realloc
+  sysctls:
+    net.core.bpf_jit_enable: "1"
+    net.core.bpf_jit_harden: "2"
