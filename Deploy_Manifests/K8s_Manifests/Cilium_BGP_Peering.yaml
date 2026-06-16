@@ -1,0 +1,15 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeeringPolicy
+metadata:
+  name: tor-bgp-policy
+  namespace: core-infrastructure
+spec:
+  nodeSelector:
+    matchLabels:
+      infrastructure.io/role: baremetal-node
+  virtualRouters:
+    - localASN: 64512
+      exportPodCIDR: true
+      neighbors:
+        - peerAddress: "10.0.0.1/32"
+          peerASN: 64511
