@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hardened-app-node
+  namespace: core-infrastructure
+  annotations:
+    container.apparmor.security.beta.kubernetes.io/app-container: localhost/runtime-infrastructure-default
+spec:
+  containers:
+    - name: app-container
+      image: alpine:latest
+      command: ["sh", "-c", "echo 'Security Policy Enforced' && sleep 3600"]
