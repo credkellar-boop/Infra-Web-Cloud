@@ -1,0 +1,12 @@
+hubble:
+  enabled: true
+  metrics:
+    enabled:
+      - dns
+      - drop
+      - httpV2:initiator_secondary
+      - icmp
+      - flow
+  tls:
+    auto:
+      method: helm
