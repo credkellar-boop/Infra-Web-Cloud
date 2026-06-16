@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: monad-execution-node
+  namespace: core-infrastructure
+spec:
+  serviceName: "monad-validator"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monad-validator-core
+  template:
+    metadata:
+      labels:
+        app: monad-validator-core
+    spec:
+      containers:
+      - name: monad-client
+        image: monad-project/execution-client:latest
+        resources:
+          requests:
+            memory: "16Gi"
+            cpu: "8"
+            baremetal_sriov_nics: "1" # Explicit mapping to direct hardware virtual functions
+          limits:
+            memory: "32Gi"
+            cpu: "16"
+            baremetal_sriov_nics: "1"
+        volumeMounts:
+        - name: validator-nvme-storage
+          mountPath: /var/lib/monad/data
+  volumeClaimTemplates:
+  - metadata:
+      name: validator-nvme-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "baremetal-encrypted-nvme"
+      resources:
+        requests:
+          storage: 500Gi
