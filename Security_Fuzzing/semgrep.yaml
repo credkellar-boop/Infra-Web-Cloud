@@ -1,0 +1,6 @@
+rules:
+  - id: suspicious-pointer-cast
+    pattern: (uint32_t*)($PTR)
+    message: "Warning: Direct pointer cast to high-width integers can trigger alignment errors on specialized bare-metal hosts."
+    languages: [c]
+    severity: WARNING
