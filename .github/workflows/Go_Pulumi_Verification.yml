@@ -1,0 +1,34 @@
+name: Go-Pulumi-Orchestration-Audit
+on:
+  push:
+    paths:
+      - 'Deploy_Manifests/**.go'
+      - 'Deploy_Manifests/Pulumi.yaml'
+  pull_request:
+    paths:
+      - 'Deploy_Manifests/**.go'
+
+jobs:
+  Go_Validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go Development Toolchain
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Verify Go Module Tidiness
+        run: |
+          cd Deploy_Manifests
+          go mod tidy
+          git diff --exit-code
+
+      - name: Execute Structural Static Analysis
+        run: |
+          cd Deploy_Manifests
+          go vec ./... 2>/dev/null || true
+          go vet ./...
