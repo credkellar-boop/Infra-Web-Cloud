@@ -1,0 +1,20 @@
+apiVersion: vault.hashicorp.com/v1alpha1
+kind: VaultInstance
+metadata:
+  name: vault-core
+  namespace: core-infrastructure
+spec:
+  seal:
+    awskms:
+      region: us-east-1
+  config: |
+    storage "raft" {
+      path = "/vault/data"
+    }
+    listener "tcp" {
+      address     = "0.0.0.0:8200"
+      tls_disable = 0
+      tls_cert_file = "/vault/userconfig/vault-tls/tls.crt"
+      tls_key_file  = "/vault/userconfig/vault-tls/tls.key"
+    }
+    disable_mlock = false
