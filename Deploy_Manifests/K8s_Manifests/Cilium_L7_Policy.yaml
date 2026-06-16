@@ -1,0 +1,17 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: secure-egress-vault
+  namespace: core-infrastructure
+spec:
+  endpointSelector:
+    matchLabels:
+      app: internal-service
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app: vault-core
+      toPorts:
+        - ports:
+            - port: "8200"
+              protocol: TCP
