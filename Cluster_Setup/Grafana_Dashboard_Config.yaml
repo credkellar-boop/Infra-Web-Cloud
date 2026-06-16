@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards-provider
+  namespace: core-infrastructure
+data:
+  providers.yaml: |
+    apiVersion: 1
+    providers:
+      - name: 'Infrastructure-Dashboards'
+        orgId: 1
+        folder: 'Network-Security'
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/infrastructure
