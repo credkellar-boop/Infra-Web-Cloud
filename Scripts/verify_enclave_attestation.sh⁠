@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Requesting cryptographic attestation document from secure enclave..."
+ATTESTATION_DOC_PATH="/tmp/attestation.bin"
+
+# Simulating the extraction of the attestation document via the nitro-cli
+nitro-cli get-attestation-document --enclave-id i-0abcdef1234567890-enc1 --output "${ATTESTATION_DOC_PATH}"
+
+echo "Validating attestation against root KMS policy bindings..."
+aws kms verify-mac \
+    --message fileb://${ATTESTATION_DOC_PATH} \
+    --mac-algorithm HMAC_SHA_384 \
+    --key-id alias/infrastructure-root-key || { echo "Attestation Failed!"; exit 1; }
+
+echo "Attestation validated. Compute integrity confirmed."
