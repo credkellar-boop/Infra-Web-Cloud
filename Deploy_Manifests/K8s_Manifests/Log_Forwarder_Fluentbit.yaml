@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: core-infrastructure
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Log_Level     info
+        Daemon        off
+
+    [INPUT]
+        Name          tail
+        Path          /var/log/containers/cilium*.log
+        Parser        docker
+        Tag           ebpf.logs
+
+    [OUTPUT]
+        Name          stdout
+        Match         *
