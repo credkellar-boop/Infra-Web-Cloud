@@ -1,0 +1,7 @@
+workers: 4
+timeout: 30
+max_input_size: 65536
+leak_detection: true
+sanitizers:
+  address: true
+  undefined_behavior: true
