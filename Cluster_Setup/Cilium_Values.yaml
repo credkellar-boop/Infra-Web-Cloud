@@ -1,0 +1,6 @@
+kubeProxyReplacement: true
+securityContext:
+  privileged: true
+bpf:
+  masquerade: true
+  tproxy: true
