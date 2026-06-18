@@ -20,5 +20,9 @@ jobs:
       - name: Compile and Execute Target
         run: |
           cd Security_Fuzzing/${{ matrix.target }}
+          
+          # Dynamically patch the Makefile to include the missing fuzzer runtime flag
+          sed -i 's/-fsanitize=address,undefined/-fsanitize=address,undefined,fuzzer/g' Makefile
+          
           make
           ./*_fuzz_target -max_total_time=300
