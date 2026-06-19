@@ -32,3 +32,12 @@ jobs:
           cd Deploy_Manifests
           go vec ./... 2>/dev/null || true
           go vet ./...
+
+      - name: Verify Go Module Tidiness
+        run: |
+          # Authenticate Git with GitHub to bypass terminal prompts and rate limits
+          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          
+          cd Deploy_Manifests
+          go mod tidy
+          git diff --exit-code
