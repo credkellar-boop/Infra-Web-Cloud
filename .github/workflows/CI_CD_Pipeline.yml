@@ -2,6 +2,8 @@ name: Infra-Web-Cloud-CI
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   Security_Audit:
@@ -10,14 +12,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Scans your repository for accidentally exposed secrets
+      # Scans repository tracking lines for exposed secrets or API keys
       - name: Scan Secrets with TruffleHog
         uses: trufflesecurity/trufflehog@main
         with:
           base: ""
           head: ${{ github.sha }}
 
-      # Static analysis gating for infrastructure and code patterns
+      # Static analysis layer auditing structural manifests and logic bugs
       - name: Run Semgrep Scan
         uses: semgrep/semgrep-action@v1
         with:
