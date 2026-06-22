@@ -1,0 +1,40 @@
+name: Update-Status-Badges
+on:
+  workflow_run:
+    workflows: ["Infra-Web-Cloud-CI", "Continuous-Kernel-Fuzzing"]
+    types:
+      - completed
+
+jobs:
+  Badge_Generation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Crucial fix: Bootstraps the folder structure to prevent the ENOENT filesystem crash
+      - name: Create Badges Directory
+        run: mkdir -p .github/badges
+
+      # Re-generates the SVGs based on latest automated pipeline data
+      - name: Generate Dynamic Badges
+        uses: emibon/badge-action@v2.0.2
+        with:
+          label: 'Kernel-Fuzzing'
+          labelColor: '555'
+          status: 'Passing'
+          gradient: [ 'success' ]
+          style: 'classic'
+          icon: ''
+          iconWidth: '13'
+          scale: '1'
+          path: '.github/badges/fuzzing.svg'
+
+      # Automatically commits the updated visual assets back to your main branch
+      - name: Commit Badges
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .github/badges/
+          git commit -m "chore: update dynamic repository badges" || exit 0
+          git push
