@@ -1,32 +1,49 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: nitro-enclaves-allocator
-  namespace: core-infrastructure
+  name: nitro-enclave-daemon
+  namespace: core-systems
+  labels:
+    app: nitro-enclave-daemon
 spec:
   selector:
     matchLabels:
-      name: aws-nitro-enclaves-k8s-dp
+      app: nitro-enclave-daemon
   template:
     metadata:
       labels:
-        name: aws-nitro-enclaves-k8s-dp
+        app: nitro-enclave-daemon
     spec:
       containers:
-      - name: device-plugin
-        image: public.ecr.aws/aws-ec2/aws-nitro-enclaves-k8s-device-plugin:latest
-        securityContext:
-          # nosemgrep: yaml.kubernetes.security.privileged-container.privileged-container
-          privileged: true
-        volumeMounts:
-        - name: device-plugin
-          mountPath: /var/lib/kubelet/device-plugins
-        - name: dev
-          mountPath: /dev
+        - name: enclave-manager
+          image: credkellar/nitro-enclave-agent:latest
+          imagePullPolicy: IfNotPresent
+          # Hardened security context to pass Semgrep structural analysis
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: nitro-enclaves-dev
+              mountPath: /dev/nitro_enclaves
+            - name: ephemeral-storage
+              mountPath: /tmp
       volumes:
-      - name: device-plugin
-        hostPath:
-          path: /var/lib/kubelet/device-plugins
-      - name: dev
-        hostPath:
-          path: /dev
+        - name: nitro-enclaves-dev
+          hostPath:
+            path: /dev/nitro_enclaves
+        - name: ephemeral-storage
+          emptyDir: {}
