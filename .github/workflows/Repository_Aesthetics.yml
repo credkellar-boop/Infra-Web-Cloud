@@ -1,29 +1,13 @@
-name: Update-Status-Badges
-on:
-  workflow_run:
-    workflows: ["Infra-Web-Cloud-CI", "Continuous-Kernel-Fuzzing"]
-    types:
-      - completed
-
-jobs:
-  Badge_Generation:
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # Add this step to bootstrap the directory
+      - name: Create Badges Directory
+        run: mkdir -p .github/badges
+
       - name: Generate Dynamic Badges
-        uses: emibcn/badge-action@v2.0.2
+        uses: emibon/badge-action@v2.0.2
         with:
           label: 'Kernel-Fuzzing'
-          status: 'Passing'
-          color: 'success'
-          path: '.github/badges/fuzzing.svg'
-
-      - name: Commit Badges
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add .github/badges/
-          git commit -m "chore: update dynamic repository badges" || exit 0
-          git push
+          # ... rest of your config
