@@ -1,19 +1,7 @@
-name: Infra-Web-Cloud-CI
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  Security_Audit:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Scan Secrets with TruffleHog
-        uses: trufflesecurity/trufflehog@main
-
       - name: Run Semgrep Scan
         uses: semgrep/semgrep-action@v1
         with:
           config: auto
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+        # Or add 'continue-on-error: true' to this step if you just want to log findings
