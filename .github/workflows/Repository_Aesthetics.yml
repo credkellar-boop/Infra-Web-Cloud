@@ -12,25 +12,22 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Crucial fix: Bootstraps the folder structure to prevent the ENOENT filesystem crash
       - name: Create Badges Directory
         run: mkdir -p .github/badges
 
-      # Re-generates the SVGs based on latest automated pipeline data
       - name: Generate Dynamic Badges
         uses: emibon/badge-action@v2.0.2
         with:
           label: 'Kernel-Fuzzing'
           labelColor: '555'
           status: 'Passing'
-          gradient: [ 'success' ]
+          gradient: "['success']"
           style: 'classic'
           icon: ''
           iconWidth: '13'
           scale: '1'
           path: '.github/badges/fuzzing.svg'
 
-      # Automatically commits the updated visual assets back to your main branch
       - name: Commit Badges
         run: |
           git config --local user.email "action@github.com"
