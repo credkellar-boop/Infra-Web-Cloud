@@ -2,19 +2,30 @@ version: '3.8'
 
 services:
   local-vault:
-    image: hashicorp/vault:1.15.2
-    container_name: dev-vault
+    image: vault:1.13.3
+    container_name: local-vault
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: "dev-token-local-secure"
+      VAULT_LOCAL_CONFIG: '{"backend": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
     ports:
       - "8200:8200"
-    environment:
-      VAULT_DEV_ROOT_TOKEN_ID: "root_token_placeholder"
-    cap_add:
-      - IPC_LOCK
-
-  dev-fuzzer:
-    build:
-      context: ../
-      dockerfile: Security_Fuzzing/Dockerfile.fuzz
-    container_name: local-fuzz-runner
+    # Hardened boundaries to clear privilege escalation and writable FS rules
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+      - /vault/logs
     volumes:
-      - ../Security_Fuzzing:/fuzzing
+      - vault_data:/vault/file
+    networks:
+      - enclave_net
+    restart: unless-stopped
+
+volumes:
+  vault_data:
+    driver: local
+
+networks:
+  enclave_net:
+    driver: bridge
