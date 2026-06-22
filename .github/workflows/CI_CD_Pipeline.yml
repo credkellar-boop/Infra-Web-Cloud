@@ -1,0 +1,24 @@
+name: Infra-Web-Cloud-CI
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  Security_Audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Scans your repository for accidentally exposed secrets
+      - name: Scan Secrets with TruffleHog
+        uses: trufflesecurity/trufflehog@main
+        with:
+          base: ""
+          head: ${{ github.sha }}
+
+      # Static analysis gating for infrastructure and code patterns
+      - name: Run Semgrep Scan
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: auto
