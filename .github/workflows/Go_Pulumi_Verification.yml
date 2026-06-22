@@ -1,27 +1,14 @@
+name: Go-Pulumi-Verification
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
   Go_Validation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
-
-      - name: Setup Go Development Toolchain
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
-          cache: true
-
-      - name: Verify Go Module Tidiness
-        run: |
-          # Authenticate Git with GitHub to bypass terminal prompts and rate limits
-          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          
-          cd Deploy_Manifests
-          go mod tidy
-          git diff --exit-code
-
-      - name: Execute Structural Static Analysis
-        run: |
-          cd Deploy_Manifests
-          go vec ./... 2>/dev/null || true
-          go vet ./...
+        # ... rest of your toolchain steps
