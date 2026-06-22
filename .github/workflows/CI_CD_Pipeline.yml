@@ -1,7 +1,0 @@
-      - name: Run Semgrep Scan
-        uses: semgrep/semgrep-action@v1
-        with:
-          config: auto
-        env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-        # Or add 'continue-on-error: true' to this step if you just want to log findings
