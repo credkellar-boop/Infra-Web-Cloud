@@ -29,4 +29,3 @@ jobs:
         uses: rustsec/audit-check-action@v2.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-
